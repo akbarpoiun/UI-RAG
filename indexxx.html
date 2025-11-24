@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIMANTAP</title>
+    <style>
+        :root {
+            /* Palet Warna Modern & Profesional */
+            /* Terang */
+            --bg-light: #f1f5f9;
+            /* Latar belakang utama */
+            --surface-light: #ffffff;
+            /* Permukaan kartu/chat */
+            --text-light: #1e293b;
+            /* Teks utama */
+            --muted-light: #64748b;
+            /* Teks sekunder */
+            --accent-light: #2563eb;
+            /* Aksen utama (biru) */
+            --header-bg-light: linear-gradient(135deg, var(--accent-light), #1d4ed8);
+            /* Gradien header */
+            --user-bubble-bg-light: #dbeafe;
+            /* Biru muda untuk user */
+            --user-bubble-text-light: #1e40af;
+            /* Teks user */
+            --user-bubble-border-light: color-mix(in srgb, var(--user-bubble-bg-light) 40%, transparent);
+            --bot-bubble-bg-light: #f8fafc;
+            /* Abu-abu sangat muda untuk bot */
+            --bot-bubble-text-light: #1e293b;
+            /* Teks bot */
+            --bot-bubble-border-light: color-mix(in srgb, var(--bot-bubble-bg-light) 40%, transparent);
+            --input-bg-light: #ffffff;
+            --input-border-light: #cbd5e1;
+            --btn-bg-light: var(--accent-light);
+            --btn-color-light: #ffffff;
+            --btn-hover-light: color-mix(in srgb, var(--btn-bg-light) 90%, black);
+            /* --fab-bg-light: var(--accent-light); */
+            /* HAPUS */
+            /* --fab-color-light: #ffffff; */
+            /* HAPUS */
+            /* --fab-border-light: transparent; */
+            /* HAPUS */
+
+            /* Gelap */
+            --bg-dark: #0f172a;
+            /* Latar belakang utama gelap */
+            --surface-dark: #1e293b;
+            /* Permukaan kartu/chat gelap */
+            --text-dark: #e2e8f0;
+            /* Teks utama gelap */
+            --muted-dark: #94a3b8;
+            /* Teks sekunder gelap */
+            --accent-dark: #3b82f6;
+            /* Aksen utama gelap */
+            --header-bg-dark: linear-gradient(135deg, var(--accent-dark), #2563eb);
+            /* Gradien header gelap */
+            --user-bubble-bg-dark: #1e3a8a;
+            /* Biru tua untuk user gelap */
+            --user-bubble-text-dark: #dbeafe;
+            /* Teks user gelap */
+            --user-bubble-border-dark: color-mix(in srgb, var(--user-bubble-bg-dark) 40%, transparent);
+            --bot-bubble-bg-dark: #334155;
+            /* Abu-abu gelap untuk bot */
+            --bot-bubble-text-dark: #e2e8f0;
+            /* Teks bot gelap */
+            --bot-bubble-border-dark: color-mix(in srgb, var(--bot-bubble-bg-dark) 40%, transparent);
+            --input-bg-dark: #334155;
+            --input-border-dark: #475569;
+            --btn-bg-dark: var(--accent-dark);
+            --btn-color-dark: #0f172a;
+            --btn-hover-dark: color-mix(in srgb, var(--btn-bg-dark) 90%, white);
+            /* --fab-bg-dark: var(--accent-dark); */
+            /* HAPUS */
+            /* --fab-color-dark: #ffffff; */
+            /* HAPUS */
+            /* --fab-border-dark: transparent; */
+            /* HAPUS */
+
+            /* Variabel Dinamis */
+            --bg: var(--bg-light);
+            --surface: var(--surface-light);
+            --text: var(--text-light);
+            --muted: var(--muted-light);
+            --accent: var(--accent-light);
+            --header-bg: var(--header-bg-light);
+            --user-bubble-bg: var(--user-bubble-bg-light);
+            --user-bubble-text: var(--user-bubble-text-light);
+            --user-bubble-border: var(--user-bubble-border-light);
+            --bot-bubble-bg: var(--bot-bubble-bg-light);
+            --bot-bubble-text: var(--bot-bubble-text-light);
+            --bot-bubble-border: var(--bot-bubble-border-light);
+            --input-bg: var(--input-bg-light);
+            --input-border: var(--input-border-light);
+            --btn-bg: var(--btn-bg-light);
+            --btn-color: var(--btn-color-light);
+            --btn-hover: var(--btn-hover-light);
+            /* FAB: lebih kontras namun harmonis dengan background */
+            --fab-bg: color-mix(in srgb, var(--accent) 12%, var(--surface) 88%);
+            --fab-color: color-contrast(var(--fab-bg) vs var(--surface), var(--surface), var(--accent));
+            --fab-border: color-mix(in srgb, var(--accent) 18%, transparent);
+
+            /* Radius & Shadow */
+            --radius: 18px;
+            /* Radius utama */
+            --radius-bubble: 20px;
+            /* Radius gelembung chat */
+            --radius-btn: 14px;
+            /* Radius tombol */
+            --radius-fab: 50%;
+            /* Radius FAB */
+            --card-shadow: 0 4px 12px -2px color-mix(in srgb, var(--bg) 50%, rgba(0, 0, 0, 0.3));
+            --input-shadow: 0 1px 3px 0 color-mix(in srgb, var(--bg) 30%, rgba(0, 0, 0, 0.2));
+            --btn-shadow: 0 4px 6px -1px color-mix(in srgb, var(--btn-bg) 30%, transparent), 0 2px 4px -1px color-mix(in srgb, var(--btn-bg) 20%, transparent);
+            --btn-shadow-hover: 0 6px 8px -1px color-mix(in srgb, var(--btn-bg) 40%, transparent), 0 4px 6px -1px color-mix(in srgb, var(--btn-bg) 30%, transparent);
+            --fab-shadow: 0 6px 18px -6px color-mix(in srgb, var(--bg) 55%, rgba(0, 0, 0, 0.45));
+            --fab-shadow-hover: 0 10px 28px -10px color-mix(in srgb, var(--bg) 60%, rgba(0, 0, 0, 0.5));
+            --fab-stroke: rgba(37, 99, 235, 0.95);
+        }
+
+        body.dark-theme {
+            --bg: var(--bg-dark);
+            --surface: var(--surface-dark);
+            --text: var(--text-dark);
+            --muted: var(--muted-dark);
+            --accent: var(--accent-dark);
+            --header-bg: var(--header-bg-dark);
+            --user-bubble-bg: var(--user-bubble-bg-dark);
+            --user-bubble-text: var(--user-bubble-text-dark);
+            --user-bubble-border: var(--user-bubble-border-dark);
+            --bot-bubble-bg: var(--bot-bubble-bg-dark);
+            --bot-bubble-text: var(--bot-bubble-text-dark);
+            --bot-bubble-border: var(--bot-bubble-border-dark);
+            --input-bg: var(--input-bg-dark);
+            --input-border: var(--input-border-dark);
+            --btn-bg: var(--btn-bg-dark);
+            --btn-color: var(--btn-color-dark);
+            --btn-hover: var(--btn-hover-dark);
+            --fab-bg: color-mix(in srgb, var(--accent) 16%, var(--surface) 84%);
+            --fab-color: color-contrast(var(--fab-bg) vs var(--surface), var(--surface), var(--accent));
+            --fab-border: color-mix(in srgb, var(--accent) 22%, transparent);
+            /* stroke untuk mode gelap: putih lembut agar kontras */
+            --fab-stroke: rgba(255, 255, 255, 0.92);
+        }
+
+        /* FAB dan theme toggle: kontras, ring untuk focus, dan transisi warna halus */
+        .fab {
+            background-color: var(--fab-bg);
+            color: var(--fab-color);
+            border: 1px solid var(--fab-border);
+            box-shadow: var(--fab-shadow);
+        }
+
+        /* FAB stroke warna sesuai tema: biru terang di light, putih di dark */
+
+        /* Tambahkan stroke eksternal pada FAB spesifik agar terlihat konsisten */
+        #calendar-fab,
+        #themeToggle {
+            box-shadow: var(--fab-shadow), 0 0 0 2px var(--fab-stroke);
+            transition: box-shadow 0.18s ease, transform 0.2s;
+        }
+
+        #calendar-fab:hover,
+        #themeToggle:hover {
+            box-shadow: var(--fab-shadow-hover), 0 0 0 3px var(--fab-stroke);
+        }
+
+        /* Reset & Layout */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 920px;
+            /* Sedikit lebih lebar */
+            height: 92vh;
+            /* Sedikit lebih tinggi */
+            background-color: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid color-mix(in srgb, var(--input-border) 30%, transparent);
+            /* Stroke minimalis */
+        }
+
+        /* Header Modern & Profesional */
+        .chat-header {
+            background: var(--header-bg);
+            color: white;
+            padding: 1.3rem 1.6rem;
+            /* Sedikit lebih lapang */
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            /* Sedikit lebih jauh */
+            box-shadow: var(--input-shadow);
+            /* Bayangan lembut */
+            border-bottom: 1px solid color-mix(in srgb, white 15%, transparent);
+            /* Stroke di bawah header */
+        }
+
+        .chat-avatar {
+            width: 50px;
+            /* Sedikit lebih besar */
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.15);
+            /* Latar transparan lebih cerah */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .chat-title {
+            font-size: 1.3rem;
+            /* Sedikit lebih besar */
+            font-weight: 600;
+            letter-spacing: -0.015em;
+            /* Sedikit lebih rapat */
+        }
+
+        /* Area Pesan */
+        #chatMessages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.6rem;
+            /* Sedikit lebih lapang */
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            /* Jarak antar pesan lebih lapang */
+            background-color: var(--surface);
+        }
+
+        /* Gelembung Chat Profesional */
+        .chat-bubble {
+            max-width: 78%;
+            /* Sedikit lebih lebar */
+            padding: 1rem 1.3rem;
+            /* Sedikit lebih lapang */
+            border-radius: var(--radius-bubble);
+            line-height: 1.65;
+            /* Sedikit lebih lapang */
+            word-wrap: break-word;
+            box-shadow: var(--input-shadow);
+            /* Bayangan lembut */
+            font-size: 1.02rem;
+            /* Sedikit lebih besar */
+            border: 1px solid var(--bot-bubble-border);
+            /* Stroke default dari bot */
+        }
+
+        .chat-bubble.user {
+            align-self: flex-end;
+            background-color: var(--user-bubble-bg);
+            color: var(--user-bubble-text);
+            border-color: var(--user-bubble-border);
+            /* Gunakan border user */
+            border-bottom-right-radius: 6px;
+            /* Sudut unik */
+        }
+
+        .chat-bubble.bot {
+            align-self: flex-start;
+            background-color: var(--bot-bubble-bg);
+            color: var(--bot-bubble-text);
+            border-color: var(--bot-bubble-border);
+            /* Gunakan border bot */
+            border-bottom-left-radius: 6px;
+            /* Sudut unik */
+        }
+
+        .chat-bubble a {
+            color: var(--accent);
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+        /* Form Input Modern */
+        #llmForm {
+            display: flex;
+            gap: 0.8rem;
+            /* Sedikit lebih lebar */
+            padding: 1.3rem;
+            /* Sedikit lebih lapang */
+            background-color: var(--surface);
+            border-top: 1px solid var(--input-border);
+            /* Garis pemisah */
+        }
+
+        #llmInput {
+            flex: 1;
+            padding: 0.85rem 1.25rem;
+            /* Sedikit lebih lapang */
+            border-radius: var(--radius-btn);
+            border: 1px solid var(--input-border);
+            background-color: var(--input-bg);
+            color: var(--text);
+            font-size: 1.02rem;
+            /* Sedikit lebih besar */
+            resize: none;
+            min-height: 56px;
+            /* Sedikit lebih tinggi */
+            max-height: 180px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        #llmInput:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+        }
+
+        #llmInput::placeholder {
+            color: var(--muted);
+            opacity: 0.75;
+            /* Sedikit lebih pudar */
+        }
+
+        /* Tombol Kirim */
+        .btn-send {
+            background: var(--btn-bg);
+            color: var(--btn-color);
+            border: none;
+            border-radius: var(--radius-btn);
+            padding: 0.85rem 1.25rem;
+            /* Sedikit lebih lapang */
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: var(--btn-shadow);
+            min-width: 56px;
+            /* Sesuaikan tinggi */
+            height: 56px;
+        }
+
+        .btn-send:hover:not(:disabled) {
+            background: var(--btn-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--btn-shadow-hover);
+            /* Bayangan hover yang lebih dalam */
+        }
+
+        .btn-send:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: var(--btn-shadow);
+        }
+
+        .btn-send:disabled {
+            opacity: 0.55;
+            /* Lebih pudar saat nonaktif */
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-send svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Loader */
+        .loader {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid color-mix(in srgb, var(--bot-bubble-text) 25%, transparent);
+            border-top-color: var(--bot-bubble-text);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Error Message */
+        #error-display {
+            color: #dc2626;
+            /* Merah error yang lebih tajam */
+            font-size: 0.875rem;
+            padding: 0.6rem 1rem;
+            text-align: center;
+            border-top: 1px solid var(--input-border);
+            /* Pemisah dari form */
+        }
+
+        /* FABs (Calendar & Theme Toggle) - Gaya Konsisten & Modern */
+        .fab {
+            position: fixed;
+            z-index: 100;
+            border-radius: var(--radius-fab);
+            width: 50px;
+            /* Sedikit lebih besar */
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s, border-color 0.2s;
+            box-shadow: var(--fab-shadow);
+            text-decoration: none;
+            /* Untuk link FAB */
+            /* Gunakan variabel warna dan border yang dinamis */
+            background-color: var(--fab-bg);
+            color: var(--fab-color);
+            border: 1px solid var(--fab-border);
+        }
+
+        .fab:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--fab-shadow-hover);
+            /* Tambahkan efek hover warna latar belakang */
+            background-color: color-mix(in srgb, var(--fab-bg) 90%, var(--text));
+            /* Sedikit lebih gelap/terang */
+        }
+
+        #calendar-fab {
+            left: 24px;
+            /* Sedikit lebih jauh dari sisi */
+            top: 24px;
+            /* Sedikit lebih jauh dari atas */
+        }
+
+        #themeToggle {
+            right: 24px;
+            /* Sedikit lebih jauh dari sisi */
+            top: 24px;
+            /* Sedikit lebih jauh dari atas */
+        }
+
+        /* Responsif */
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+                /* Sedikit lebih lapang */
+            }
+
+            .chat-container {
+                height: 95vh;
+            }
+
+            .chat-header {
+                padding: 1.1rem;
+                gap: 10px;
+            }
+
+            .chat-title {
+                font-size: 1.15rem;
+            }
+
+            .chat-avatar {
+                width: 46px;
+                height: 46px;
+            }
+
+            #chatMessages {
+                padding: 1.2rem;
+                gap: 1rem;
+            }
+
+            .chat-bubble {
+                max-width: 88%;
+                /* Lebih lebar di layar kecil */
+                padding: 0.85rem 1.1rem;
+                font-size: 0.98rem;
+                line-height: 1.6;
+            }
+
+            #llmForm {
+                padding: 1.1rem;
+                gap: 0.6rem;
+            }
+
+            #llmInput {
+                padding: 0.75rem 1rem;
+                min-height: 52px;
+                font-size: 0.98rem;
+            }
+
+            .btn-send {
+                min-width: 52px;
+                height: 52px;
+                padding: 0.75rem 1rem;
+            }
+
+            .fab {
+                width: 46px;
+                height: 46px;
+            }
+
+            /* Perbaikan: pisahkan posisi FAB agar tidak tertimpa */
+            #calendar-fab {
+                left: 14px;
+                right: auto;
+                top: 14px;
+            }
+
+            #themeToggle {
+                right: 14px;
+                left: auto;
+                top: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="calendar.html" id="calendar-fab" class="fab" title="Kalender">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="5" width="18" height="16" rx="4" stroke="currentColor" stroke-width="2" />
+            <rect x="7" y="9" width="10" height="2" rx="1" fill="currentColor" />
+        </svg>
+    </a>
+    <button id="themeToggle" class="fab" title="Ganti Tema">🌙</button>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <span class="chat-avatar" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.14" />
+                    <rect x="8" y="8" width="8" height="8" rx="4" fill="currentColor" />
+                </svg>
+            </span>
+            <span class="chat-title">SIMANTAP</span>
+        </div>
+
+        <div id="chatMessages" class="chat-messages">
+            <div class="chat-bubble bot"> Halo! Saya adalah Sistem Manajemen Tanya Pintar dari Badan Pusat Statistik Kab
+                Rembang. Silakan ajukan pertanyaan Anda. </div>
+        </div>
+
+        <form id="llmForm" class="chat-form">
+            <textarea id="llmInput" rows="1" placeholder="Ketik pertanyaan Anda..." autocomplete="off"></textarea>
+            <button type="submit" class="btn-send" aria-label="Kirim">
+                <svg class="send-icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor" />
+                </svg>
+            </button>
+        </form>
+
+        <div id="error-display" class="error-message"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // --- Theme Toggle Logic ---
+        const themeToggle = document.getElementById('themeToggle');
+        const applyTheme = (isDark) => {
+            document.body.classList.toggle('dark-theme', isDark);
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('darkMode', isDark ? 'dark' : 'light');
+        };
+
+        const savedTheme = localStorage.getItem('darkMode');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialTheme = savedTheme ? savedTheme === 'dark' : prefersDark;
+        applyTheme(initialTheme);
+
+        themeToggle.addEventListener('click', () => {
+            applyTheme(!document.body.classList.contains('dark-theme'));
+        });
+
+        // --- Chat Logic ---
+        // Inisialisasi riwayat dari localStorage atau array kosong
+        let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+        // Gunakan URL API yang sesuai dengan server FastAPI Anda
+        const API_URL = 'https://agenda-api-service-763926970161.asia-southeast2.run.app/chat'; // Misalnya, sesuaikan jika berbeda
+
+        const chatMessagesElement = document.getElementById('chatMessages');
+        const llmFormElement = document.getElementById('llmForm');
+        const llmInputElement = document.getElementById('llmInput');
+        const errorDisplayElement = document.getElementById('error-display');
+
+        function addMessageToUI(sender, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-bubble');
+            messageDiv.classList.add(sender);
+
+            messageDiv.innerHTML = marked.parse(text);
+
+            chatMessagesElement.appendChild(messageDiv);
+            chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
+        }
+
+        // Typing sequence variables
+        const typingSteps = [
+            'memahami instruksi...',
+            'menghubungkan dengan basis data....',
+            'mencari surat terkait....',
+            'Menganalisis isi dokumen...',
+            'menyusun jawaban....',
+            'Menyiapkan hasil terbaik untukmu...'
+        ];
+        let typingIntervalId = null;
+        let currentTypingIndex = 0;
+
+        function showTypingIndicator() {
+            // Jika sudah ada indikator, jangan buat lagi
+            if (document.getElementById('typing-indicator')) return;
+
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.classList.add('chat-bubble', 'bot');
+            typingDiv.innerHTML = '<div class="loader" style="vertical-align:middle;margin-right:10px;"></div><span class="typing-text"></span>';
+            chatMessagesElement.appendChild(typingDiv);
+            chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
+
+            // Mulai siklus teks
+            currentTypingIndex = 0;
+            const typingTextSpan = typingDiv.querySelector('.typing-text');
+            typingTextSpan.textContent = typingSteps[currentTypingIndex];
+
+            // Ganti teks setiap 10 detik (10000 ms)
+            typingIntervalId = setInterval(() => {
+                currentTypingIndex = (currentTypingIndex + 1) % typingSteps.length;
+                typingTextSpan.textContent = typingSteps[currentTypingIndex];
+                chatMessagesElement.scrollTop = chatMessagesElement.scrollHeight;
+            }, 10000);
+        }
+
+        function hideTypingIndicator() {
+            const typingElement = document.getElementById('typing-indicator');
+            if (typingIntervalId) {
+                clearInterval(typingIntervalId);
+                typingIntervalId = null;
+            }
+            if (typingElement) typingElement.remove();
+        }
+
+        function showError(message) {
+            errorDisplayElement.textContent = message;
+            setTimeout(() => { errorDisplayElement.textContent = ''; }, 5000);
+        }
+
+        async function sendMessage(event) {
+            event.preventDefault();
+
+            const message = llmInputElement.value.trim();
+            if (!message) return;
+
+            // Clear input immediately when user sends
+            llmInputElement.value = '';
+            llmInputElement.style.height = 'auto';
+
+            const sendButton = llmFormElement.querySelector('button[type="submit"]');
+            sendButton.disabled = true;
+
+            try {
+                addMessageToUI('user', message);
+                showTypingIndicator();
+
+                // Kirim query dan riwayat saat ini ke API
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        query: message, // Gunakan kunci 'query' sesuai model ChatRequest
+                        history: chatHistory // Kirim riwayat lengkap
+                    }),
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+                }
+
+                const data = await response.json();
+
+                // Validasi struktur respons dari API
+                if (!data || typeof data !== 'object' || typeof data.response !== 'string' || !Array.isArray(data.history)) {
+                    throw new Error('Respons dari server tidak valid atau tidak lengkap.');
+                }
+
+                const botResponse = data.response;
+                const updatedHistory = data.history; // Gunakan kunci 'history' dari respons API
+                // const idMap = data.id_map || {}; // Jika diperlukan di frontend
+                // const lastFocusedId = data.last_focused_id; // Jika diperlukan di frontend
+
+                hideTypingIndicator();
+                addMessageToUI('bot', botResponse);
+
+                // Perbarui riwayat lokal dengan data dari API
+                chatHistory = updatedHistory;
+                localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+
+            } catch (error) {
+                console.error("Error sending message:", error);
+                hideTypingIndicator();
+                showError(`Gagal mengirim pesan: ${error.message}`);
+            } finally {
+                sendButton.disabled = false;
+                // keep input cleared (already cleared above) and reset height to auto
+                llmInputElement.style.height = 'auto';
+            }
+        }
+
+        llmFormElement.addEventListener('submit', sendMessage);
+
+        llmInputElement.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage(event);
+            }
+        });
+
+        // Auto-resize textarea
+        llmInputElement.addEventListener('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    </script>
+</body>
+
+</html>
