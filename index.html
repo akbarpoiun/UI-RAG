@@ -195,9 +195,44 @@
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            display: none;
+            /* Keep element in flow briefly so transition can run; JS will set display:none after animation */
             height: 0;
             margin: 0;
+        }
+
+        /* Animate center-content when hiding (logo -> chat) */
+        .center-content.animate-out {
+            opacity: 0;
+            transform: translateY(-12px) scale(0.98);
+            transition: opacity 360ms cubic-bezier(.2, .9, .3, 1), transform 360ms cubic-bezier(.2, .9, .3, 1);
+            pointer-events: none;
+        }
+
+        /* Fade individual elements inside center-content with a subtle stagger */
+        .center-content .logo-container,
+        .center-content .app-title,
+        .center-content .app-subtitle {
+            transition: opacity 240ms ease, transform 320ms cubic-bezier(.2, .9, .3, 1);
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .center-content.animate-out .logo-container {
+            opacity: 0;
+            transform: translateY(-6px) scale(0.98);
+            transition-delay: 0ms;
+        }
+
+        .center-content.animate-out .app-title {
+            opacity: 0;
+            transform: translateY(-8px) scale(0.99);
+            transition-delay: 40ms;
+        }
+
+        .center-content.animate-out .app-subtitle {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.995);
+            transition-delay: 80ms;
         }
 
         .logo-container {
@@ -275,6 +310,10 @@
             line-height: 1.5;
             /* Hilangkan border untuk tampilan lebih bersih */
             border: none;
+            /* Subtle surface polish */
+            background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+            box-shadow: 0 6px 18px -12px rgba(2, 6, 23, 0.06);
+            backdrop-filter: blur(0.2px);
         }
 
         .chat-bubble.user {
@@ -469,6 +508,59 @@
             border-top-color: var(--bot-bubble-text);
             border-radius: 50%;
             animation: spin 1s linear infinite;
+        }
+
+        /* Appearance animations for chat bubbles */
+        @keyframes popIn {
+            0% {
+                transform: scale(0.96) translateY(6px);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.02) translateY(-2px);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes floatIn {
+            0% {
+                transform: translateY(12px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .chat-bubble {
+            will-change: transform, opacity;
+            transition: box-shadow 0.18s ease, transform 0.12s ease;
+        }
+
+        .chat-bubble.enter {
+            animation: popIn 320ms cubic-bezier(.2, .9, .3, 1) both;
+            animation-fill-mode: both;
+            /* allow per-element delay via inline style.animationDelay set from JS */
+        }
+
+        /* Slight lift on hover for better tactile feel */
+        .chat-bubble.user:hover,
+        .chat-bubble.bot:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px -10px rgba(0, 0, 0, 0.45);
+        }
+
+        /* Center content entrance */
+        .center-content {
+            animation: floatIn 560ms cubic-bezier(.2, .9, .3, 1) both;
         }
 
         /* Loading bubble untuk bot */
@@ -705,10 +797,18 @@
         const llmInputElement = document.getElementById('llmInput');
         const errorDisplayElement = document.getElementById('error-display');
 
-        function addMessageToUI(sender, text) {
+        function addMessageToUI(sender, text, delay = 0) {
             const messageDiv = document.createElement('div');
-            messageDiv.classList.add('chat-bubble');
-            messageDiv.classList.add(sender);
+            messageDiv.classList.add('chat-bubble', sender, 'enter');
+
+            // Allow per-message stagger delay (used when rendering history)
+            if (delay && typeof delay === 'number') {
+                messageDiv.style.animationDelay = delay + 'ms';
+            }
+
+            // Remove the enter class after the animation finishes (delay + anim duration)
+            const removeAfter = (delay || 0) + 520;
+            setTimeout(() => messageDiv.classList.remove('enter'), removeAfter);
 
             if (sender === 'bot') {
                 // Untuk pesan bot, gunakan struktur dengan ikon
@@ -721,8 +821,10 @@
             }
 
             chatContainerElement.appendChild(messageDiv);
-            // Scroll ke bawah agar pesan terbaru terlihat
-            chatContainerElement.scrollTop = chatContainerElement.scrollHeight;
+            // Smooth scroll after insertion
+            requestAnimationFrame(() => {
+                chatContainerElement.scrollTop = chatContainerElement.scrollHeight;
+            });
         }
 
         function showLoadingBubble() {
@@ -763,10 +865,15 @@
 
             // Cek apakah ini pesan pertama (sebelumnya konten tengah belum hilang)
             if (!centerContentElement.classList.contains('hidden')) {
-                // Fade out konten tengah SAAT PESAN PERTAMA DIKIRIM
-                centerContentElement.classList.add('hidden');
-                // Tampilkan container chat bubbles
+                // Animate out the center content (logo -> chat) for a polished transition
+                centerContentElement.classList.add('animate-out');
                 chatContainerElement.classList.add('active');
+                // After animation, fully hide center content so it doesn't take space
+                setTimeout(() => {
+                    centerContentElement.classList.add('hidden');
+                    centerContentElement.style.display = 'none';
+                    centerContentElement.classList.remove('animate-out');
+                }, 520);
             }
 
             // Clear input immediately when user sends
@@ -846,16 +953,19 @@
             this.style.height = (this.scrollHeight) + 'px';
         });
 
-        // --- Tambahkan pesan selamat datang ---
-        // Hanya tampilkan jika belum ada riwayat chat
+        // --- Tambahkan pesan selamat datang atau tampilkan riwayat dengan staggered animation ---
         if (chatHistory.length === 0) {
             addMessageToUI('bot', 'Halo! Saya adalah Sistem Manajemen Tanya Pintar dari Badan Pusat Statistik Kab Rembang. Silakan ajukan pertanyaan Anda.');
         } else {
-            // Jika ada riwayat, tampilkan riwayat tersebut
-            chatHistory.forEach(([role, content]) => {
+            // If there's existing history, render it with a small stagger.
+            // NOTE: do NOT auto-hide the center-content/logo; keep it visible
+            // until the user explicitly sends a message.
+            chatContainerElement.classList.add('active');
+            chatHistory.forEach(([role, content], idx) => {
                 if (role === 'user' || role === 'assistant') {
                     const sender = role === 'user' ? 'user' : 'bot';
-                    addMessageToUI(sender, content);
+                    const delay = idx * 110; // ms
+                    addMessageToUI(sender, content, delay);
                 }
             });
         }
