@@ -952,25 +952,23 @@
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
         });
-
-        // --- Tambahkan pesan selamat datang atau tampilkan riwayat dengan staggered animation ---
-        if (chatHistory.length === 0) {
-            addMessageToUI('bot', 'Halo! Saya adalah Sistem Manajemen Tanya Pintar dari Badan Pusat Statistik Kab Rembang. Silakan ajukan pertanyaan Anda.');
-        } else {
-            // If there's existing history, render it with a small stagger.
-            // NOTE: do NOT auto-hide the center-content/logo; keep it visible
-            // until the user explicitly sends a message.
-            chatContainerElement.classList.add('active');
-            chatHistory.forEach(([role, content], idx) => {
-                if (role === 'user' || role === 'assistant') {
-                    const sender = role === 'user' ? 'user' : 'bot';
-                    const delay = idx * 110; // ms
-                    addMessageToUI(sender, content, delay);
-                }
-            });
+        // --- Render chat history dengan staggered animation ---
+        // NOTE: do NOT auto-hide the center-content/logo; keep it visible
+        // until the user explicitly sends a message.
+        
+        chatContainerElement.classList.add('active');
+        
+        chatHistory.forEach(([role, content], idx) => {
+            if (role === 'user' || role === 'assistant') {
+                const sender = role === 'user' ? 'user' : 'bot';
+                const delay = idx * 110; // ms
+                addMessageToUI(sender, content, delay);
+            }
+        });
         }
     </script>
 </body>
 
 </html>
+
 
