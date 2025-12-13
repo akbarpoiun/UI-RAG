@@ -789,7 +789,7 @@
         // Inisialisasi riwayat dari localStorage atau array kosong
         let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
         // Gunakan URL API yang sesuai dengan server FastAPI Anda
-        const API_URL = 'http://localhost:8000/chat';
+        const API_URL = 'https://agenda-api-service-763926970161.asia-southeast2.run.app/chat';
 
         const centerContentElement = document.getElementById('centerContent');
         const chatContainerElement = document.getElementById('chatContainer');
@@ -973,3 +973,4 @@
 </body>
 
 </html>
+
